@@ -17,7 +17,7 @@ Examples :
 
 ./nvsort -t "|" -f 1 -f 16 myfile.txt  # sort a file numerically on fields 1 and 16 using "|" as separator
 
-./nvsort -t "|" -r -f 1 -f 16 myfile.txt  #reverse sort a file numerically on field 1 using "|" as separator
+./nvsort -t "|" -r -f 1 -f 16 myfile.txt  #  reverse sort a file numerically on field 1 using "|" as separator
 ```
 
 ### Tests
