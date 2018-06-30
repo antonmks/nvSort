@@ -8,7 +8,7 @@ Run make
 
 Examples :
 
-./nvsort myfile.txt // sort file myfile.txt 
+./nvsort myfile.txt [comment] // sort file myfile.txt 
 
 ./nvsort -t "|" -f 16 myfile.txt // sort file myfile.txt alphabetically on field 16 using | as separator
 
