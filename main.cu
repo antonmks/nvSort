@@ -23,7 +23,7 @@ int main(int ac, char **av)
 	string usage = "Usage : nvsort [-t FIELD_SEPARATOR] [-n NUMERIC_SORT] [-k KEYS] FILE";
 	vector<unsigned int> keys;
 	vector<unsigned int> keys_numeric;
-	uint64_t chunk_sz = 800000000; 
+	uint64_t chunk_sz = 800000000; // segment size, 800MB is ok for GTX 1080
 	bool reverse = 0;
 	map<size_t, vector<string> > files_to_merge;
 	thrust::host_vector<char, thrust::cuda::experimental::pinned_allocator<char> > file_buffer(chunk_sz);
