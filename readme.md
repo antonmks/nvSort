@@ -11,13 +11,13 @@ Examples :
 ```console
 ./nvsort myfile.txt    # sort file myfile.txt
 
-./nvsort -t "|" -f 16 myfile.txt    # sort file myfile.txt alphabetically on field 16 using "|" as separator
+./nvsort -t "|" -f 16 myfile.txt  # sort a file alphabetically on field 16 using "|" as separator
 
-./nvsort -t "|" -f 1n myfile.txt    # sort file myfile.txt numerically on field 1 using "|" as separator
+./nvsort -t "|" -f 1n myfile.txt  # sort a file numerically on field 1 using "|" as separator
 
-./nvsort -t "|" -f 1 -f 16 myfile.txt    # sort file myfile.txt numerically on fields 1 and 16 using "|" as separator
+./nvsort -t "|" -f 1 -f 16 myfile.txt  # sort a file numerically on fields 1 and 16 using "|" as separator
 
-./nvsort -t "|" -r -f 1 -f 16 myfile.txt    #reverse sort file myfile.txt numerically on field 1 using "|" as separator
+./nvsort -t "|" -r -f 1 -f 16 myfile.txt  #reverse sort a file numerically on field 1 using "|" as separator
 ```
 
 ### Tests
