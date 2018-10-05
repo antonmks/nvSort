@@ -1,0 +1,11 @@
+nvsort : main.obj str_sort.obj 
+	nvcc.exe -O3 --expt-extended-lambda -arch=sm_61 -lcuda -o nvsort main.obj  str_sort.obj
+
+nvcc = nvcc.exe --expt-extended-lambda --machine 64 -O3 -arch=sm_61 -I "moderngpu/src/moderngpu/" -c 
+
+main.obj : main.cu
+	$(nvcc) main.cu
+str_sort.obj : str_sort.cu str_sort.h
+	$(nvcc) str_sort.cu
+	
+clean : del main.obj str_sort.obj 
