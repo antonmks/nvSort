@@ -16,22 +16,20 @@
 using namespace std;
 using namespace mgpu;
 
-standard_context_t context(0);
-
 
 void str_sort(std::vector<unsigned int>& keys, std::vector<unsigned int>& keys_numeric, thrust::device_vector<char>& device_file_buffer,
 		      thrust::device_vector<char>& device_file_buffer_out, thrust::device_vector<char>& delimiter, size_t read_cnt,
 		      size_t first_offset, bool& file_to_rewind, bool reverse)
 {
-	
+
+    standard_context_t context(0);	    
 	thrust::counting_iterator<unsigned int> begin(0);
 	char h_delimiter = delimiter[0];
 	std::clock_t start1 = std::clock();			
-    
+ 
 	auto begin_keys = thrust::make_zip_iterator(thrust::make_tuple(device_file_buffer.begin(), thrust::counting_iterator<int>(1)));
     auto end_keys = thrust::make_zip_iterator(thrust::make_tuple(device_file_buffer.begin() + read_cnt, thrust::counting_iterator<int>(read_cnt)));
     auto cnt = thrust::count(device_file_buffer.begin(), device_file_buffer.begin() + read_cnt,'\n');
-   	//cout << "test lines " << cnt << " " << read_cnt << endl;
     thrust::device_vector<int> nl_pos(cnt);
     auto res_keys = thrust::make_zip_iterator(thrust::make_tuple(thrust::make_discard_iterator(), nl_pos.begin()));
     thrust::copy_if(begin_keys, end_keys, res_keys, count_newlines());  
@@ -149,15 +147,15 @@ size_t str_merge(std::vector<unsigned int>& keys, std::vector<unsigned int>& key
 
     if(reverse) {
 	    compare_fields_desc f(h_delimiter, thrust::raw_pointer_cast(d_keys.data()), thrust::raw_pointer_cast(d_keys_numeric.data()), keys.size());
-	    merge(nl_pos_char.data(), perm.begin(), first_cnt,
-	          nl_pos_char.data() + first_cnt,  perm.begin() + first_cnt, cnt-first_cnt,
-	          field_pos_tmp.data(), perm_tmp.begin(), f, context);	
+	    //merge(nl_pos_char.data(), perm.begin(), first_cnt,
+	    //      nl_pos_char.data() + first_cnt,  perm.begin() + first_cnt, cnt-first_cnt,
+	    //      field_pos_tmp.data(), perm_tmp.begin(), f, context);	
 	}
 	else{
 	    compare_fields f(h_delimiter, thrust::raw_pointer_cast(d_keys.data()), thrust::raw_pointer_cast(d_keys_numeric.data()), keys.size());
-	    merge(nl_pos_char.data(), perm.begin(), first_cnt,
-	          nl_pos_char.data() + first_cnt,  perm.begin() + first_cnt, cnt-first_cnt,
-	          field_pos_tmp.data(), perm_tmp.begin(), f, context);		
+	    //merge(nl_pos_char.data(), perm.begin(), first_cnt,
+	    //      nl_pos_char.data() + first_cnt,  perm.begin() + first_cnt, cnt-first_cnt,
+	    //      field_pos_tmp.data(), perm_tmp.begin(), f, context);		
 	}
 	
 	thrust::device_vector<int> nl_len(cnt);
@@ -172,8 +170,8 @@ size_t str_merge(std::vector<unsigned int>& keys, std::vector<unsigned int>& key
 
 	//for(int z = 0; z < 10; z++)
 	//	cout << "nl pos  " << nl_pos[z] << " " << nl_len_pos[z] << endl;
-    interval_scatter(thrust::raw_pointer_cast(device_file_buffer.data()), read_cnt, thrust::raw_pointer_cast(nl_pos.data()), nl_pos.size(), 
-    	                                      thrust::raw_pointer_cast(nl_len_pos.data()), thrust::raw_pointer_cast(device_file_buffer_out.data()), context);        
+    //interval_scatter(thrust::raw_pointer_cast(device_file_buffer.data()), read_cnt, thrust::raw_pointer_cast(nl_pos.data()), nl_pos.size(), 
+    //	                                      thrust::raw_pointer_cast(nl_len_pos.data()), thrust::raw_pointer_cast(device_file_buffer_out.data()), context);        
     auto new_pos1 = nl_len_pos[first_cnt-1];
     auto new_pos2 = nl_len_pos[cnt-1];    
     //cout << "pos1 pos 2 " << new_pos1 << " " << new_pos2 << endl;

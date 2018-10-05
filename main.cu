@@ -23,7 +23,7 @@ int main(int ac, char **av)
 	string usage = "Usage : nvsort [-t FIELD_SEPARATOR] [-n NUMERIC_SORT] [-k KEYS] FILE";
 	vector<unsigned int> keys;
 	vector<unsigned int> keys_numeric;
-	uint64_t chunk_sz = 800000000; // segment size, 800MB is ok for GTX 1080
+	uint64_t chunk_sz = 800000000; 
 	bool reverse = 0;
 	map<size_t, vector<string> > files_to_merge;
 	thrust::host_vector<char, thrust::cuda::experimental::pinned_allocator<char> > file_buffer(chunk_sz);
@@ -31,6 +31,7 @@ int main(int ac, char **av)
 	thrust::device_vector<char> device_file_buffer_out(chunk_sz);	
 	
 	std::clock_t start1 = std::clock();	
+	std::clock_t start2 = std::clock();	
 	
 	if (ac <= 1) {
         cout << usage << endl;
@@ -108,6 +109,8 @@ int main(int ac, char **av)
 			//cout << "sort rewind " << j << endl;
 		};	
 		tot_read = tot_read + read_cnt;
+		//std::cout<< "file read time: " <<  ( ( std::clock() - start1 ) / (double)CLOCKS_PER_SEC ) <<  '\n';    	
+		start1 = std::clock();	
 		
 		thrust::copy(file_buffer.begin(), file_buffer.begin() + read_cnt, device_file_buffer.begin());		
 		str_sort(keys, keys_numeric, device_file_buffer, device_file_buffer_out, delimiter, read_cnt, 0, first, reverse);		
@@ -118,13 +121,16 @@ int main(int ac, char **av)
 			file_out = file_out + '.' + to_string(k);
 			files_to_merge[read_cnt].push_back(file_out);			
 		};		
+		std::cout<< "sort phase time: " <<  ( ( std::clock() - start1 ) / (double)CLOCKS_PER_SEC ) <<  '\n';    	
+		//start1 = std::clock();	
 		fstream sorted_file(file_out.c_str(),ios::out|ios::binary);
 		sorted_file.write((char *)file_buffer.data(), read_cnt);		
 		sorted_file.close();			
+		//std::cout<< "file write time: " <<  ( ( std::clock() - start1 ) / (double)CLOCKS_PER_SEC ) <<  '\n';    	
 
 	};
 	f.close();
-	//std::cout<< "sort phase time: " <<  ( ( std::clock() - start1 ) / (double)CLOCKS_PER_SEC ) <<  '\n';    	
+
 
 	//merge phase
 	unsigned int k = 0;	
@@ -257,6 +263,7 @@ int main(int ac, char **av)
 	rename(file_merged.c_str(), file_final.c_str());
 
 	//std::cout<< "merge phase time: " <<  ( ( std::clock() - start1 ) / (double)CLOCKS_PER_SEC ) <<  '\n';    	
+	//std::cout<< "total time: " <<  ( ( std::clock() - start2 ) / (double)CLOCKS_PER_SEC ) <<  '\n';    	
     return 0;
 
 }
