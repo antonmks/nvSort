@@ -26,6 +26,7 @@ Hardware : Intel i3-4130, 16GB of RAM, GTX 1080, Ubuntu 16.04, 120GB SSD as a st
 
 Sorting an 800MB file on one of the string fields 
 on cpu using --parallel=2 total time = 20 seconds
+
 on gpu total time = 4 seconds
 
 The actual aorting time is about 16 seconds on a cpu and about 0.8 seconds on a gpu(including copying data to and from a gpu).
